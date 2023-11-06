@@ -2,6 +2,8 @@ package com.example.sem10.group.application;
 
 import com.example.sem10.group.domain.Group;
 import com.example.sem10.group.domain.GroupRepository;
+import com.example.sem10.grouptype.domain.GroupType;
+import com.example.sem10.grouptype.domain.GroupTypeRepository;
 import com.example.sem10.person.domain.Person;
 import com.example.sem10.person.domain.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,6 +24,8 @@ public class GroupController {
     private GroupRepository groupRepository;
     @Autowired
     private PersonRepository personRepository;
+    @Autowired
+    private GroupTypeRepository groupTypeRepository;
     @GetMapping
     public ResponseEntity<List<Group>> getAll() {
         List<Group> groups = groupRepository.findAll();
@@ -43,6 +48,11 @@ public class GroupController {
             person = completePerson.get();
         }
         group.setPeople(persons);
+
+        Long groupTypeId = group.getGroupType().getId();
+        Optional<GroupType> groupType = groupTypeRepository.findById(groupTypeId);
+        group.setGroupType(groupType.get());
+
         groupRepository.save(group);
         return ResponseEntity.status(201).body("Group created");
     }

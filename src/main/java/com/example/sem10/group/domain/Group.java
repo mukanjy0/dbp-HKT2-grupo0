@@ -1,5 +1,6 @@
 package com.example.sem10.group.domain;
 
+import com.example.sem10.grouptype.domain.GroupType;
 import com.example.sem10.person.domain.Person;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,8 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+    @ManyToOne
+    GroupType groupType;
     @ManyToMany
     Set<Person> people;
 }
